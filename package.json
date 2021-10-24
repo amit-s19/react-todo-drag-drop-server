@@ -1,0 +1,27 @@
+{
+  "name": "react-todo-drag-drop-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.6",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.0",
+    "node-fetch": "^2.6.1",
+    "nodemailer": "^6.6.2",
+    "nodemailer-express-handlebars": "^4.0.0",
+    "nodemon": "^2.0.7"
+  }
+}
