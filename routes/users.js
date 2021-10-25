@@ -44,13 +44,15 @@ router.post('/signup', async (req, res) => {
 });
 
 router.get('/getTodo', async (req, res) => {
-
-    const todos = await Todo.findOne({});
-
-    if (todos) {
-        return res.status(200).send(todos.todos);
+    try {
+        const todos = await Todo.findOne({});
+        if (todos) {
+            return res.status(200).send(todos.todos);
+        }
+        return res.status(404).send("No todos found!");
+    } catch (err) {
+        console.log(err);
     }
-    return res.status(404).send("No todos found!");
 });
 
 router.post('/addTodo', async (req, res) => {
@@ -103,11 +105,15 @@ router.post('/removeTodo', async (req, res) => {
     if (!id) {
         return res.status(422).send({ error: "One of the mandatory fields is missing!" });
     }
+    try {
 
-    const removeTodo = await Todo.updateOne({}, { $pull: { todos: { id: id } } });
+        const removeTodo = await Todo.updateOne({}, { $pull: { todos: { id: id } } });
 
-    if (removeTodo) {
-        return res.status(200).send(removeTodo);
+        if (removeTodo) {
+            return res.status(200).send(removeTodo);
+        }
+    } catch (err) {
+        console.log(err);
     }
 
     return res.status(400).send("An error occured")
@@ -123,11 +129,38 @@ router.post('/dragTodo', async (req, res) => {
     if (!id || !status) {
         return res.status(422).send({ error: "One of the mandatory fields is missing!" });
     }
-    
-    const dragTodo = await Todo.updateOne({"todos.id":id}, { $set: { "todos.$.status": status}});
+    try {
+        const dragTodo = await Todo.updateOne({ "todos.id": id }, { $set: { "todos.$.status": status } });
 
-    if (dragTodo) {
-        return res.status(200).send(dragTodo);
+        if (dragTodo) {
+            return res.status(200).send(dragTodo);
+        }
+
+    } catch (err) {
+        console.log(err)
+    }
+    return res.status(400).send("An error occured!");
+
+});
+
+router.post('/updateTodo', async (req, res) => {
+    const {
+        id,
+        newTitle,
+        newDesc
+    } = req.body;
+
+    if (!id || !newTitle || !newDesc) {
+        return res.status(422).send({ error: "One of the mandatory fields is missing!" });
+    }
+    try {
+        const updatedTodo = await Todo.updateOne({ "todos.id": id }, { $set: { "todos.$.title": newTitle, "todos.$.desc": newDesc } });
+
+        if (updatedTodo) {
+            return res.status(200).send(updatedTodo);
+        }
+    } catch (err) {
+        console.log(err)
     }
     return res.status(400).send("An error occured!");
 
